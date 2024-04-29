@@ -289,6 +289,7 @@ def build_prompt(prompt, google_results, first_name, last_name,
 
 def main():
 
+
     with open('config.yaml') as f:
         cfg = yaml.safe_load(f)
     # system_message = cfg['system_message_option_2']
@@ -296,7 +297,104 @@ def main():
     prompt = cfg['prompt_2']
     json_schema = cfg['json_schema']
 
- 
+    password = st.text_input("Enter Password:", type="password")
+
+    if password == correct_password:
+
+        st.title("Coworker Search App")
+        option = sidebar()
+        
+        if option == "Upload PDF Resume":
+            st.write("PDF Upload version not yet available")
+            # uploaded_file = st.file_uploader("Upload PDF", type="pdf")
+            # if uploaded_file is not None:
+                # text = extract_text_from_pdf(uploaded_file)
+                # st.write("Text extracted from PDF:")
+                # st.write(text)
+
+        elif option == "Paste Plain Text Resume":
+            st.write("Paste Plain Text Resume version not yet available")
+            # text_input = st.text_area("Paste plain text here:")
+            # if st.button("Search"):
+                # st.write("Text extracted from input:")
+                # st.write(text_input)
+        
+        else:
+            col1, col2 = st.columns(2)
+            with col1:
+                first_name = st.text_input("First name:")
+            with col2:
+                last_name = st.text_input("Last name:")
+            num_option = st.selectbox("Number of input positions (job title/company):",
+                                  ("",
+                                   "Input One Position", 
+                                   "Input Several Positions"))
+            if num_option == "Input One Position":
+                results = input_fields_single()
+                system_message = cfg['single_position_system_message']
+                # st.write(results)
+                if st.button("Search", key=1):
+                    if not results['workplace']:
+                        st.warning("Please fill in all the required fields.")
+                    else:
+                        queries = build_queries(first_name, last_name, [results])
+                        # st.write(queries)
+                        google_results = make_requests(queries)
+                        # st.write(google_results)
+                        job_info = first_name + last_name + str(results)
+                        input_prompt = build_prompt(prompt,
+                                                    google_results,
+                                                    first_name,
+                                                    last_name,
+                                                    json_format,
+                                                    json_schema,
+                                                    job_info)
+                        # st.write(input_prompt)
+                        # query chatgpt
+                        with st.spinner(f"Querying GPT4 with information found on {first_name} {last_name}..."):
+                            answers = query_openai(input_prompt, system_message, 10, True)
+                            # display chatgpt response
+                        st.markdown(f"#### {first_name} {last_name}'s Possible Coworkers:")
+                        st.write(json.loads(answers.replace("'", '')))
+                        st.markdown("---")
+                        # st.markdown(f"#### Relevant Links for {first_name} {last_name}:")
+                        # display person of interest links
+                        # if the_org:
+                        #     st.write(the_org)
+                        # if signal_hire:
+                        #     st.write(signal_hire)
+
+            elif num_option == "Input Several Positions":
+                results = input_fields_multiple()
+                system_message = cfg['multiple_position_system_message']
+                # st.write(results)
+                if st.button("Search", key=3):
+                    if not results[0]['workplace']:
+                        st.warning("Please fill in all the required fields.")
+                    else:
+                        queries = build_queries(first_name, last_name, results)
+                        # st.write(queries)
+                        google_results = make_requests(queries)
+                        # st.write(google_results)
+                        job_info = first_name + last_name + str(results)
+                        input_prompt = build_prompt(prompt,
+                                                    google_results,
+                                                    first_name,
+                                                    last_name,
+                                                    json_format,
+                                                    json_schema,
+                                                    job_info)
+                        # st.write(input_prompt)
+                        # query chatgpt
+                        with st.spinner(f"Querying GPT4 with information found on {first_name} {last_name}..."):
+                            answers = query_openai(input_prompt, system_message, 10, True)
+                        # display chatgpt response
+                        st.markdown(f"#### {first_name} {last_name}'s Possible Coworkers:")
+                        st.write(json.loads(answers.replace("'", '')))
+                        st.markdown("---")
+
+    else:
+        st.error("Incorrect password. Access denied.")
 
 if __name__ == "__main__":
     main()
