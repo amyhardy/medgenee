@@ -288,15 +288,17 @@ def build_prompt(prompt, google_results, first_name, last_name,
 
 
 def main():
-
-    with open('config.yaml') as f:
-        cfg = yaml.safe_load(f)
+    st.title("MedGenee")
+    st.write("Welcome to MedGenee! This is a Streamlit app.")
+    st.write("You can add more content here.")
+    # with open('config.yaml') as f:
+    #     cfg = yaml.safe_load(f)
     # system_message = cfg['system_message_option_2']
     # json_format = cfg['json_format']
     # prompt = cfg['prompt_2']
     # json_schema = cfg['json_schema']
     
-    st.title("MedGenee")
+
 
 if __name__ == "__main__":
     main()
