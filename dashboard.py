@@ -114,6 +114,7 @@
 #     main()
 import streamlit as st
 import openai
+import os
 
 secret_key = os.environ.get('OPENAI_API_KEY')
 
