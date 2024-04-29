@@ -3,3 +3,5 @@ beautifulsoup4==4.12.3
 lxml
 openai==1.1.1
 pyyaml==6.0.1
+streamlit==1.33.0
+requests==2.31.0

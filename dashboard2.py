@@ -10,10 +10,6 @@ import re
 import random 
 import string
 
-# TODO: inquire about Signal Hire API
-# TODO: alternative: query signal hires site -- fix signalhire employees page bug
-# TODO: add functionality for pdf resume, extracting name work place from it?
-# TODO: potentially add chatgpt query to infer job titles close to POI's job title
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
@@ -91,20 +87,6 @@ def generate(prompt, system_message):
             )
             return sample.choices[0].text
 
-def extract_text_from_pdf(uploaded_file):
-    """
-    extracts text from uploaded PDF version of resume
-    @param uploaded_file: PDF uploaded to streamlit dashboard
-    @return text: extracted text
-    """
-    text = ""
-    pdf_reader = PyPDF2.PdfReader(uploaded_file)
-    num_pages = len(pdf_reader.pages)
-    for page_num in range(num_pages):
-        page = pdf_reader.pages[page_num] 
-        text += page.extract_text()  
-    return text
-
 def extract_text(html_content):
     """
     extracts text from html contents of a webpage
@@ -115,50 +97,6 @@ def extract_text(html_content):
     text = soup.get_text(separator=' ', strip=True)
     return text
 
-def query_name_workplace(query):
-    """
-    """
-    output = ""
-    url = f"https://www.google.com/search?q={query}"
-    response = requests.get(url, headers=HEADERS)
-    if response.status_code == 200:
-        plain_text = extract_text(response.text)
-        output += "RESULTS FROM GOOGLING NAME AND WORKPLACE:\n"
-        output += plain_text
-    return output
-
-def query_name_workplace(query):
-    """
-    """
-    output = ""
-    url = f"https://www.google.com/search?q={query}"
-    response = requests.get(url, headers=HEADERS)
-    if response.status_code == 200:
-        plain_text = extract_text(response.text)
-        output += "RESULTS FROM GOOGLING NAME AND WORKPLACE:\n"
-        output += plain_text
-    return output
-
-def sidebar():
-    """
-    """
-    # option for input
-    option = st.sidebar.selectbox(
-        "Choose input method:",
-        ("Input Info Manually", 
-            "Upload PDF Resume", 
-            "Paste Plain Text Resume")
-            )
-    # sidebar information
-    st.sidebar.markdown("## README")
-    st.sidebar.markdown("---")
-    st.sidebar.write("- Current input formats supported: 'Input Info Manually ONLY'")
-    st.sidebar.markdown("---")
-    st.sidebar.write("- This version of the prototype uses Google queries based on first name, last name, current place of work, and current job title to gather information on the person of interest.")
-    st.sidebar.write("- It also requests information from theOrg.com by attempting to find the relevant profile with the given information.")
-    st.sidebar.write("- It takes the gathered information and uses it as input to ChatGPT to extract possible coworkers from the text.")
-    
-    return option
 
 def input_fields_multiple():
     """
