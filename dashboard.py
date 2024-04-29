@@ -295,8 +295,8 @@ def main():
     json_format = cfg['json_format']
     prompt = cfg['prompt_2']
     json_schema = cfg['json_schema']
-
- 
+    
+    st.title("MedGenee")
 
 if __name__ == "__main__":
     main()
