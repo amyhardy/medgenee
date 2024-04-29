@@ -204,6 +204,7 @@ def main():
     if st.button("Start Gene Analysis"):
         with st.spinner(f"Generating Gene Analysis on {topic}..."):
             input_prompt = "Hi, how are you?"
+            system_message = "You are nice."
             answers = query_openai(input_prompt, system_message, 10, True)
 
 if __name__ == "__main__":
