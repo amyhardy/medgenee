@@ -292,9 +292,9 @@ def main():
     with open('config.yaml') as f:
         cfg = yaml.safe_load(f)
     # system_message = cfg['system_message_option_2']
-    json_format = cfg['json_format']
-    prompt = cfg['prompt_2']
-    json_schema = cfg['json_schema']
+    # json_format = cfg['json_format']
+    # prompt = cfg['prompt_2']
+    # json_schema = cfg['json_schema']
     
     st.title("MedGenee")
 
