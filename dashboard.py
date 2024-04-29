@@ -203,6 +203,7 @@ def main():
     # Button to show greeting
     if st.button("Start Gene Analysis"):
         with st.spinner(f"Generating Gene Analysis on {topic}..."):
+            input_prompt = "Hi, how are you?"
             answers = query_openai(input_prompt, system_message, 10, True)
 
 if __name__ == "__main__":
