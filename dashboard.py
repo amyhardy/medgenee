@@ -115,6 +115,8 @@
 import streamlit as st
 import openai
 import os
+st.write(os.environ.get('OPENAI_API_KEY'))
+print(os.environ.get('OPENAI_API_KEY'))
 
 openai.api_key = os.environ.get('OPENAI_API_KEY')
 
