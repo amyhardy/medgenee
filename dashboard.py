@@ -194,7 +194,7 @@ def generate(prompt, system_message):
             return sample.choices[0].text
 
 def main():
-    st.title('Welcome to the Greeting App')
+    st.title('MedGenee')
 
     # User input
     topic = st.text_input("Disease, disorder, or topic here:")
