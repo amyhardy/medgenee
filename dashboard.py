@@ -132,7 +132,7 @@ def main():
                 st.write("Label not found. Check if the page structure has changed or your query didn't return results.")
 
 
-            answers = query_openai(input_prompt, system_message, 10, True)
+            # answers = query_openai(input_prompt, system_message, 10, True)
 
 if __name__ == "__main__":
     main()
