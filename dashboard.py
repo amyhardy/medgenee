@@ -143,7 +143,7 @@ def main():
                     link_urls = [link['href'] for link in links]
                     link_abstracts = []
                     for link in link_urls:
-                        url = f'https://pubmed.ncbi.nlm.nih.gov/37729908/{link}'
+                        url = f'https://pubmed.ncbi.nlm.nih.gov/{link}'
                         st.write(url)
                         res = requests.get(url, headers=HEADERS)
                         html_text = res.text
