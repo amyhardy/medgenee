@@ -18,7 +18,7 @@ def load_css():
     st.markdown("""
         <style>
         .stApp {
-            background-image: url('images/your-image.jpg');
+            background-image: url('DALLE.webp');
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
