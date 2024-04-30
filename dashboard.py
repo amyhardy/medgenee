@@ -123,9 +123,9 @@ def main():
         # Extract the text and split it to get the number of pages
         total_pages_text = label.get_text()
         total_pages = total_pages_text.split()[-1].replace(",", "")  # Extracting the number and removing comma
-        print("Total number of pages:", total_pages)
+        st.write("Total number of pages:", total_pages)
     else:
-        print("Label not found. Check if the page structure has changed or your query didn't return results.")
+        st.write("Label not found. Check if the page structure has changed or your query didn't return results.")
 
 
     if st.button("Start Gene Analysis"):
