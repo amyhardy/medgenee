@@ -99,8 +99,9 @@ def main():
     st.sidebar.subheader("MedGenee: A GPT-4 Powered Gene Analysis App")
     st.sidebar.markdown('---')
     st.sidebar.write("MedGenee allows users to jumpstart their gene analysis exploration journey by \
-            pulling relevant abstracts from scientific research articles and using LLMs to \
+            pulling relevant abstracts from scientific research articles in real time and using LLMs to \
             extract important gene information from them.")
+    
     st.sidebar.write("Please enter a topic of interest.")
     st.sidebar.write("Examples include 'alzheimer's disease', \
                      'sickle cell disease', 'cystic fibrosis', etc.")
@@ -127,7 +128,7 @@ def main():
             # Find the label with class 'of-total-pages' and extract its text
             pages = soup.find("label", class_="of-total-pages")
             if pages:
-                # Extract the text and split it to get the number of pages
+                # extract the text and split it to get the number of pages
                 total_pages_text = pages.get_text()
                 total_pages = total_pages_text.split()[-1].replace(",", "")  # Extracting the number and removing comma
                 total_pages = 2
@@ -140,8 +141,21 @@ def main():
                     soup_page = BeautifulSoup(response.text, "html.parser")
                     links = soup_page.find_all("a", class_="docsum-title")
                     link_urls = [link['href'] for link in links]
-                    st.write("Links on this page:", link_urls)
-                    progress_bar.progress(i / total_pages)
+                    link_abstracts = []
+                    for link in link_urls:
+                        res = requests.get(link, headers=HEADERS)
+                        html_text = res.text
+                        link_soup = BeautifulSoup(html_text, 'html.parser')
+                        abstract = link_soup.find("div", class_="abstract-content selected")
+                        if abstract:
+                            abstract_text = abstract.get_text(separator=' ', strip=True)
+                            link_abstracts.append((link, abstract_text))
+                    
+                        # Update the progress bar
+                        progress_bar.progress(i / total_pages)
+                    
+                    st.write("Abstracts from all pages:", link_abstracts)
+
 
             else:
                 st.write("Label not found. Check if the page structure has changed or your query didn't return results.")
