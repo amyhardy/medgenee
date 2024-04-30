@@ -4,7 +4,7 @@ import os
 import time
 import requests
 from bs4 import BeautifulSoup
-import stqdm
+from stqdm import stqdm
 
 openai.api_key = os.environ.get('OPENAI_API_KEY')
 
