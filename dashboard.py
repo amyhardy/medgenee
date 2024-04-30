@@ -14,7 +14,17 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
 }
 
-
+def load_css():
+    st.markdown("""
+        <style>
+        .stApp {
+            background-image: url('images/your-image.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        </style>
+        """, unsafe_allow_html=True)
 
 def query_openai(prompt, system_message, wait_time, prints_on, json_format_opt):
     """
@@ -97,7 +107,7 @@ def extract_text(html_content):
     return text
 
 def main():
-
+    load_css()
     st.sidebar.subheader("MedGenee: A GPT-4 Powered Gene Analysis App")
     st.sidebar.markdown('---')
     st.sidebar.write("Amy Hardy - ah64343")
