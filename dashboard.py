@@ -34,6 +34,7 @@ def query_openai(prompt, system_message, wait_time, prints_on):
                 if "context_length_exceeded" in str(e):
                     st.write('ChatGPT context window exceeded, skipping this sample')
                     return None
+            st.write(f"Pausing for {wait_time}")
             time.sleep(wait_time)
 
 def generate(prompt, system_message):
@@ -117,31 +118,25 @@ def main():
     input_prompt = f"Analyze the above scientific research paper abstract. Please return the output in the following JSON format: {json_format}"
     input_prompt += f"If no genes are found in the abstracts, return {none_return}"
     system_message = "You are a bioinformatics expert."
-    st.write(1)
+
     if st.button("Start Gene Analysis"):
         with st.spinner(f"Generating Gene Analysis on {topic}..."):
             format_topic = topic.lower().replace("'", '%27').replace(' ', '+')
             url = f"https://pubmed.ncbi.nlm.nih.gov/?term={format_topic}%5BTitle%2FAbstract%5D+gene%5BTitle%2FAbstract%5D&filter=dates.2023%2F1%2F1-3000%2F12%2F12"
             # url = f"https://pubmed.ncbi.nlm.nih.gov/?term={format_topic}%5BTitle%2FAbstract%5D&filter=dates.2023%2F1%2F1-3000%2F12%2F12"
             response = requests.get(url, headers=HEADERS)
-            st.write(2)
             if response.status_code == 200:
-                st.write(3)
                 soup = BeautifulSoup(response.text, "html.parser")
                 # Find the label with class 'of-total-pages' and extract its text
                 pages = soup.find("label", class_="of-total-pages")
-                st.write(4)
                 if pages:
-                    st.write(5)
                     # extract the text and split it to get the number of pages
                     total_pages_text = pages.get_text()
                     total_pages = total_pages_text.split()[-1].replace(",", "")  # Extracting the number and removing comma
                     total_pages = 2
-                    st.write(6)
                     st.write("Total number of pages:", total_pages)
                     progress_bar = st.progress(0, "Gathering abstracts...")
                     max_pages = 10
-                    st.write(7)
                     num_pages = min(max_pages, total_pages)
                     for i in range(1, num_pages):
                         page_url = url + f"&page={i}"
