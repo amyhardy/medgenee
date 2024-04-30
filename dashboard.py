@@ -158,15 +158,15 @@ def main():
                             link_abstracts.append((link, abstract_text))
                     
                         # Update the progress bar
-                        progress_bar.progress(i / total_pages)
+                        progress_bar.progress(i / total_pages, "Gathering abstracts...")
                     
-                    # st.write("Abstracts from all pages:", link_abstracts)
-                    st.write(f"Found {len(link_abstracts)} abstracts about {topic}.")
-                    jsons = []
-                    for abstract in link_abstracts:
-                        answers = query_openai(input_prompt, system_message, 10, True)
-                        jsons.append(answers)
-                    st.write(jsons)
+                # st.write("Abstracts from all pages:", link_abstracts)
+                st.write(f"Found {len(link_abstracts)} abstracts about {topic}.")
+                jsons = []
+                for abstract in link_abstracts:
+                    answers = query_openai(input_prompt, system_message, 10, True)
+                    jsons.append(answers)
+                st.write(jsons)
 
 
             else:
