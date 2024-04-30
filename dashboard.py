@@ -125,60 +125,55 @@ def main():
             format_topic = topic.lower().replace("'", '%27').replace(' ', '+')
             url = f"https://pubmed.ncbi.nlm.nih.gov/?term={format_topic}%5BTitle%2FAbstract%5D+gene%5BTitle%2FAbstract%5D&filter=dates.2023%2F1%2F1-3000%2F12%2F12"
             # url = f"https://pubmed.ncbi.nlm.nih.gov/?term={format_topic}%5BTitle%2FAbstract%5D&filter=dates.2023%2F1%2F1-3000%2F12%2F12"
-            st.write(url)
             response = requests.get(url, headers=HEADERS)
-            # plain_text = extract_text(response.text)
-            # st.write(plain_text)
-            soup = BeautifulSoup(response.text, "html.parser")
+            if response.status_code == 200:
+                soup = BeautifulSoup(response.text, "html.parser")
 
-            # Find the label with class 'of-total-pages' and extract its text
-            pages = soup.find("label", class_="of-total-pages")
-            if pages:
-
-                # extract the text and split it to get the number of pages
-                total_pages_text = pages.get_text()
-                total_pages = total_pages_text.split()[-1].replace(",", "")  # Extracting the number and removing comma
-                total_pages = 2
-                st.write("Total number of pages:", total_pages)
-                progress_bar = st.progress(0, "Gathering abstracts...")
-                
-                for i in range(1, total_pages):
-                    # Update the progress bar
-                    progress_bar.progress(i / total_pages, "Gathering abstracts...")
-                    page_url = url + f"&page={i}"
-                    response = requests.get(page_url, headers=HEADERS)
-                    # html_document = response.text
-                    soup_page = BeautifulSoup(response.text, "html.parser")
-                    links = soup_page.find_all("a", class_="docsum-title")
-                    link_urls = [link['href'] for link in links]
-                    link_abstracts = []
-                    for link in link_urls:
-                        url = f'https://pubmed.ncbi.nlm.nih.gov/{link}'
-                        # st.write(url)
-                        res = requests.get(url, headers=HEADERS)
-                        html_text = res.text
-                        link_soup = BeautifulSoup(html_text, 'html.parser')
-                        abstract = link_soup.find("div", class_="abstract-content selected")
-                        if abstract:
-                            abstract_text = abstract.get_text(separator=' ', strip=True)
-                            link_abstracts.append((link, abstract_text))
-                    
-                    
-                    
-                # st.write("Abstracts from all pages:", link_abstracts)
-                st.write(f"Found {len(link_abstracts)} abstracts about {topic}.")
-                jsons = []
-                for abstract in link_abstracts:
-                    answers = query_openai(input_prompt, system_message, 10, True)
-                    jsons.append(answers)
-                st.write(jsons)
-
+                # Find the label with class 'of-total-pages' and extract its text
+                pages = soup.find("label", class_="of-total-pages")
+                if pages:
+                    # extract the text and split it to get the number of pages
+                    total_pages_text = pages.get_text()
+                    total_pages = total_pages_text.split()[-1].replace(",", "")  # Extracting the number and removing comma
+                    total_pages = 2
+                    st.write("Total number of pages:", total_pages)
+                    progress_bar = st.progress(0, "Gathering abstracts...")
+                    max_pages = 10
+                    num_pages = min(max_pages, total_pages)
+                    for i in range(1, num_pages):
+                        # Update the progress bar
+                        progress_bar.progress(i / total_pages, "Gathering abstracts...")
+                        page_url = url + f"&page={i}"
+                        response = requests.get(page_url, headers=HEADERS)
+                        if response.status_code == 200:
+                            # html_document = response.text
+                            soup_page = BeautifulSoup(response.text, "html.parser")
+                            links = soup_page.find_all("a", class_="docsum-title")
+                            link_urls = [link['href'] for link in links]
+                            link_abstracts = []
+                            for link in link_urls:
+                                url = f'https://pubmed.ncbi.nlm.nih.gov/{link}'
+                                res = requests.get(url, headers=HEADERS)
+                                if response.status_code == 200:
+                                    html_text = res.text
+                                    link_soup = BeautifulSoup(html_text, 'html.parser')
+                                    abstract = link_soup.find("div", class_="abstract-content selected")
+                                    if abstract:
+                                        abstract_text = abstract.get_text(separator=' ', strip=True)
+                                        link_abstracts.append((link, abstract_text))
+                                else:
+                                    continue
+                        else:
+                            continue                   
+                    st.write(f"Found {len(link_abstracts)} abstracts about {topic}.")
+                    jsons = []
+                    for abstract in link_abstracts:
+                        answers = query_openai(input_prompt, system_message, 10, True)
+                        jsons.append(answers)
+                    st.write(jsons)
 
             else:
-                st.write("Label not found. Check if the page structure has changed or your query didn't return results.")
-
-
-            # answers = query_openai(input_prompt, system_message, 10, True)
+                st.write("Num pages not found. Check if the page structure has changed or your query didn't return results.")
 
 if __name__ == "__main__":
     main()
