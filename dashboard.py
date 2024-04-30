@@ -125,7 +125,7 @@ def main():
     system_message = "You are a bioinformatics expert."
 
     if st.button("Start Gene Analysis"):
-        with st.spinner(f"Generating Gene Analysis on {topic}..."):
+        with st.spinner(f"Generating gene analysis on {topic}. This may take a few minutes..."):
             format_topic = topic.lower().replace("'", '%27').replace(' ', '+')
             url = f"https://pubmed.ncbi.nlm.nih.gov/?term={format_topic}%5BTitle%2FAbstract%5D+gene%5BTitle%2FAbstract%5D&filter=dates.2023%2F1%2F1-3000%2F12%2F12"
             # url = f"https://pubmed.ncbi.nlm.nih.gov/?term={format_topic}%5BTitle%2FAbstract%5D&filter=dates.2023%2F1%2F1-3000%2F12%2F12"
@@ -181,11 +181,8 @@ def main():
                     if 'genes' in genes:
                         if genes['genes'][0] != "None":
                             jsons.extend(genes['genes'])
-                    # second_prompt = f"Discuss the implications of the genes mentioned in this abstract for the pathogenesis of {topic}. Highlight any new findings."
-                    # second_query = abstract[1] + '\n\n' + second_prompt
-                    # answers_2 = query_openai(second_query, system_message, 10, True, False)
-                    # st.write(f"Let's discuss the implications of the genes mentioned in the abstracts for the pathogenesis of {topic}. Highlight any new findings.")
-                    # st.write(answers_2)
+     
+
                 set_geres = [x for x in set([x.upper() for x in jsons])]
                 second_prompt = f"Discuss the implications of the genes mentioned in this list for the pathogenesis of {topic}. Highlight any new findings."
                 second_query = "genes:" + str(set_geres) + '\n\n' + second_prompt
@@ -195,12 +192,15 @@ def main():
                 st.subheader(f"Genes found in the most recent research on {topic}")
                 st.write(jsons)
                 st.markdown("---")
+                st.markdown('#### In-Depth Genetic Analysis')
+                st.markdown("---")
                 st.write(f"Let's discuss the implications of the genes mentioned in the abstracts for the pathogenesis of {topic}. Highlight any new findings.")
                 st.write(answers_2)
                 st.markdown("---")
                 third_prompt = f"Compare the genes listed with those known to be associated with {topic} and note any novel genes. Are any listed new findings?"
                 third_prompt += "genes:" + str(set_geres)
                 answers_3 = query_openai(third_prompt, system_message, 10, True, False)
+                st.markdown('#### Comparative Analysis of Genes')
                 st.markdown("---")
                 st.write(f"Let's compare the genes listed with those known to be associated with {topic} and see if any of the genes found are new discoveries.")
                 st.write(answers_3)
