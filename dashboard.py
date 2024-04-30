@@ -98,8 +98,8 @@ def main():
 
     st.sidebar.subheader("MedGenee: A GPT-4 Powered Gene Analysis App")
     st.sidebar.markdown('---')
-    st.sidebar.write("Amy Hardy: ah64343")
-    st.sidebar.write("| AI 395T | AI in Healthcare | Spring 2024 |")
+    st.sidebar.write("Amy Hardy - ah64343")
+    st.sidebar.write("AI 395T: AI in Healthcare Spring 2024")
     st.sidebar.markdown('---')
     st.sidebar.write("MedGenee allows users to jumpstart their gene analysis exploration journey by \
             pulling relevant abstracts from scientific research articles in real time and using LLMs to \
