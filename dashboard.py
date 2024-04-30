@@ -113,9 +113,10 @@ def main():
     with open('config.yaml') as f:
         cfg = yaml.safe_load(f)
     json_format = cfg['json_format']
+    none_return = cfg['none_return']
     topic = st.text_input("Disease, disorder, or topic here:")
     input_prompt = f"Analyze the above scientific research paper abstract. Please return the output in the following JSON format: {json_format}"
-    input_prompt += "If no genes are found in the abstracts, return '{'genes': []}'"
+    input_prompt += f"If no genes are found in the abstracts, return {none_return}"
     system_message = "You are a bioinformatics expert."
 
     
