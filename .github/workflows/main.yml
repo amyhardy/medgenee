@@ -1,0 +1,15 @@
+name: Simple CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Echo a secret
+        run: echo "The secret is $SECRET"
+        env:
+          SECRET: ${{ secrets.OPENAI_API_KEY }}
