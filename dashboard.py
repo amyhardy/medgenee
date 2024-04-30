@@ -137,7 +137,7 @@ def main():
                     total_pages_text = pages.get_text()
                     total_pages = total_pages_text.split()[-1].replace(",", "")  # Extracting the number and removing comma
                     total_pages = 2
-                    st.write("Total number of pages:", total_pages)
+                    st.write("Total number of pages found on PubMed for Academic articles:", total_pages)
                     progress_bar = st.progress(0, "Gathering abstracts...")
                     max_pages = 10
                     num_pages = min(max_pages, total_pages)
@@ -172,11 +172,13 @@ def main():
                 st.write(f"Found {len(link_abstracts)} abstracts about {topic}.")
                 jsons = []
                 for abstract in link_abstracts:
-                    answers = query_openai(input_prompt, system_message, 10, True)
+                    final_prompt = abstract[1] + '\n\n' + input_prompt
+                    answers = query_openai(final_prompt, system_message, 10, True)
                     genes = json.loads(answers)
                     if 'genes' in genes:
-                        jsons.append({'genes': genes['genes'],
-                                      'abstract': abstract[1]})
+                        if genes['genes'][0] != "None":
+                            jsons.append({'genes': genes['genes'],
+                                        'abstract': abstract[1]})
                 st.write(jsons)
                 
             else:

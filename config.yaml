@@ -15,7 +15,7 @@ none_return : |
 example_genes: |
   {
     "genes": [
-      "APOE",
+      "APOE4",
       "BRCA1",
       "TP53",
       "EGFR",
