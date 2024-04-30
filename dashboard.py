@@ -154,7 +154,7 @@ def generate(prompt, system_message):
         @param system_message: chatgpt system message
         @returns: GPT output
         """
-        json_format_opt = True
+        json_format_opt = False
         model_str = 'gpt-4-0125-preview'
         temperature = 1.0
         max_tokens = 1500
