@@ -18,7 +18,7 @@ def load_css():
     st.markdown("""
         <style>
         .stApp {
-            background-image: url('dalle.jpg');
+            background-image: url('https://raw.githubusercontent.com/amyhardy/medgenee/main/dalle.jpg');
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
