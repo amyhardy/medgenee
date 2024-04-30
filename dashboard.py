@@ -134,13 +134,17 @@ def main():
             # Find the label with class 'of-total-pages' and extract its text
             pages = soup.find("label", class_="of-total-pages")
             if pages:
+
                 # extract the text and split it to get the number of pages
                 total_pages_text = pages.get_text()
                 total_pages = total_pages_text.split()[-1].replace(",", "")  # Extracting the number and removing comma
                 total_pages = 2
                 st.write("Total number of pages:", total_pages)
                 progress_bar = st.progress(0, "Gathering abstracts...")
+                
                 for i in range(1, total_pages):
+                    # Update the progress bar
+                    progress_bar.progress(i / total_pages, "Gathering abstracts...")
                     page_url = url + f"&page={i}"
                     response = requests.get(page_url, headers=HEADERS)
                     # html_document = response.text
@@ -159,8 +163,7 @@ def main():
                             abstract_text = abstract.get_text(separator=' ', strip=True)
                             link_abstracts.append((link, abstract_text))
                     
-                    # Update the progress bar
-                    progress_bar.progress(i / total_pages, "Gathering abstracts...")
+                    
                     
                 # st.write("Abstracts from all pages:", link_abstracts)
                 st.write(f"Found {len(link_abstracts)} abstracts about {topic}.")
