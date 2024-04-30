@@ -113,8 +113,19 @@ def main():
     format_topic = topic.lower().replace("'", '%27').replace(' ', '+')
     url = "https://pubmed.ncbi.nlm.nih.gov/?term={format_topic}%5BTitle%2FAbstract%5D&filter=dates.2023%2F1%2F1-3000%2F12%2F12"
     response = requests.get(url, headers=HEADERS)
-    plain_text = extract_text(response.text)
-    st.write(plain_text)
+    # plain_text = extract_text(response.text)
+    # st.write(plain_text)
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    # Find the label with class 'of-total-pages' and extract its text
+    label = soup.find("label", class_="of-total-pages")
+    if label:
+        # Extract the text and split it to get the number of pages
+        total_pages_text = label.get_text()
+        total_pages = total_pages_text.split()[-1].replace(",", "")  # Extracting the number and removing comma
+        print("Total number of pages:", total_pages)
+    else:
+        print("Label not found. Check if the page structure has changed or your query didn't return results.")
 
 
     if st.button("Start Gene Analysis"):
