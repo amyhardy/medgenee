@@ -158,8 +158,8 @@ def main():
                             abstract_text = abstract.get_text(separator=' ', strip=True)
                             link_abstracts.append((link, abstract_text))
                     
-                        # Update the progress bar
-                        progress_bar.progress(i / total_pages, "Gathering abstracts...")
+                    # Update the progress bar
+                    progress_bar.progress(i / total_pages, "Gathering abstracts...")
                     
                 # st.write("Abstracts from all pages:", link_abstracts)
                 st.write(f"Found {len(link_abstracts)} abstracts about {topic}.")
