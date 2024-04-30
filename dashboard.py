@@ -132,7 +132,8 @@ def main():
                 total_pages = total_pages_text.split()[-1].replace(",", "")  # Extracting the number and removing comma
                 total_pages = 2
                 st.write("Total number of pages:", total_pages)
-                for i in stqdm(range(1, total_pages)):
+                progress_bar = st.progress(0)
+                for i in range(1, total_pages):
                     page_url = url + f"&page={i}"
                     response = requests.get(page_url, headers=HEADERS)
                     # html_document = response.text
@@ -140,6 +141,7 @@ def main():
                     links = soup_page.find_all("a", class_="docsum-title")
                     link_urls = [link['href'] for link in links]
                     st.write("Links on this page:", link_urls)
+                    progress_bar.progress(i / total_pages)
 
             else:
                 st.write("Label not found. Check if the page structure has changed or your query didn't return results.")
