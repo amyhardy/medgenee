@@ -27,7 +27,6 @@ def query_openai(prompt, system_message, wait_time, prints_on):
     # generate chatgpt response, keep trying if error received
     while True:
         try:
-            st.write("querying chatgpt")
             return generate(prompt, system_message)
         except Exception as e:
             if prints_on:
@@ -99,6 +98,9 @@ def main():
 
     st.sidebar.subheader("MedGenee: A GPT-4 Powered Gene Analysis App")
     st.sidebar.markdown('---')
+    st.write("Amy Hardy: ah64343")
+    st.write("| AI 395T | AI in Healthcare | Spring 2024 |")
+    st.sidebar.markdown('---')
     st.sidebar.write("MedGenee allows users to jumpstart their gene analysis exploration journey by \
             pulling relevant abstracts from scientific research articles in real time and using LLMs to \
             extract important gene information from them.")
@@ -130,12 +132,12 @@ def main():
             response = requests.get(url, headers=HEADERS)
             if response.status_code == 200:
                 soup = BeautifulSoup(response.text, "html.parser")
-                # Find the label with class 'of-total-pages' and extract its text
+
                 pages = soup.find("label", class_="of-total-pages")
                 if pages:
-                    # extract the text and split it to get the number of pages
+
                     total_pages_text = pages.get_text()
-                    total_pages = total_pages_text.split()[-1].replace(",", "")  # Extracting the number and removing comma
+                    total_pages = total_pages_text.split()[-1].replace(",", "")
                     total_pages = 2
                     st.write("Total number of pages found on PubMed for Academic articles:", total_pages)
                     progress_bar = st.progress(0, "Gathering abstracts...")
@@ -144,8 +146,9 @@ def main():
                     for i in range(1, num_pages):
                         page_url = url + f"&page={i}"
                         response = requests.get(page_url, headers=HEADERS)
+
                         if response.status_code == 200:
-                            # html_document = response.text
+
                             soup_page = BeautifulSoup(response.text, "html.parser")
                             links = soup_page.find_all("a", class_="docsum-title")
                             link_urls = [link['href'] for link in links]
@@ -164,7 +167,7 @@ def main():
                                     continue
                         else:
                             continue  
-                        # Update the progress bar
+
                         progress_bar.progress(i / total_pages, "Gathering abstracts...")                 
 
                 else:
@@ -177,9 +180,9 @@ def main():
                     genes = json.loads(answers)
                     if 'genes' in genes:
                         if genes['genes'][0] != "None":
-                            # jsons.append({'genes': genes['genes'],
-                            #             'abstract': abstract[1]})
                             jsons.extend(genes['genes'])
+                st.markdown("---")
+                st.subheader(f"Genes found in the most recent research on {topic}")
                 st.write(jsons)
                 
             else:
