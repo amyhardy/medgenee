@@ -186,8 +186,9 @@ def main():
                     # answers_2 = query_openai(second_query, system_message, 10, True, False)
                     # st.write(f"Let's discuss the implications of the genes mentioned in the abstracts for the pathogenesis of {topic}. Highlight any new findings.")
                     # st.write(answers_2)
+                set_geres = [x for x in set([x.upper() for x in jsons])]
                 second_prompt = f"Discuss the implications of the genes mentioned in this list for the pathogenesis of {topic}. Highlight any new findings."
-                second_query = "genes:" + str(jsons) + '\n\n' + second_prompt
+                second_query = "genes:" + str(set_geres) + '\n\n' + second_prompt
                 answers_2 = query_openai(second_query, system_message, 10, True, False)
                 
                 st.markdown("---")
