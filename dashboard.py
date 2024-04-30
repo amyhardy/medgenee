@@ -137,7 +137,7 @@ def main():
                 total_pages = total_pages_text.split()[-1].replace(",", "")  # Extracting the number and removing comma
                 total_pages = 2
                 st.write("Total number of pages:", total_pages)
-                progress_bar = st.progress(0, text="Gathering abstracts...")
+                progress_bar = st.progress(0, "Gathering abstracts...")
                 for i in range(1, total_pages):
                     page_url = url + f"&page={i}"
                     response = requests.get(page_url, headers=HEADERS)
