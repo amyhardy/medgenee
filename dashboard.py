@@ -27,6 +27,7 @@ def query_openai(prompt, system_message, wait_time, prints_on):
     # generate chatgpt response, keep trying if error received
     while True:
         try:
+            st.write("querying chatgpt")
             return generate(prompt, system_message)
         except Exception as e:
             if prints_on:
