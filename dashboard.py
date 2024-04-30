@@ -5,6 +5,7 @@ import time
 import requests
 from bs4 import BeautifulSoup
 import yaml  # type: ignore
+import json
 
 openai.api_key = os.environ.get('OPENAI_API_KEY')
 
@@ -171,7 +172,11 @@ def main():
                     jsons = []
                     for abstract in link_abstracts:
                         answers = query_openai(input_prompt, system_message, 10, True)
-                        jsons.append(answers)
+                        genes = json.loads(answers)
+                        if 'genes' in genes:
+                            jsons.append({'genes': genes,
+                                          'abstract': abstract[1]})
+                        # jsons.append(answers)
                     st.write(jsons)
 
                 else:
