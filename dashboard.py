@@ -15,14 +15,7 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
 }
 
-def generate_pdf(html_content, output_filename):
-    """
-    Generates a PDF file from HTML content.
-    @param html_content: String containing HTML content.
-    @param output_filename: Filename for the generated PDF.
-    """
-    pdfkit.from_string(html_content, output_filename)
-    return output_filename
+
 
 def query_openai(prompt, system_message, wait_time, prints_on, json_format_opt):
     """
@@ -135,7 +128,6 @@ def main():
     system_message = "You are a bioinformatics expert."
 
     if st.button("Start Gene Analysis"):
-        generate_pdf("Hi", 'amy.pdf')
         with st.spinner(f"Generating gene analysis on {topic}. This may take a few minutes..."):
             format_topic = topic.lower().replace("'", '%27').replace(' ', '+')
             url = f"https://pubmed.ncbi.nlm.nih.gov/?term={format_topic}%5BTitle%2FAbstract%5D+gene%5BTitle%2FAbstract%5D&filter=dates.2023%2F1%2F1-3000%2F12%2F12"
