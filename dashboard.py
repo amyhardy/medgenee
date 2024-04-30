@@ -4,6 +4,7 @@ import os
 import time
 import requests
 from bs4 import BeautifulSoup
+import stqdm
 
 openai.api_key = os.environ.get('OPENAI_API_KEY')
 
@@ -107,7 +108,7 @@ def main():
     st.title('MedGenee')
 
     st.markdown("---")
-    
+
     topic = st.text_input("Disease, disorder, or topic here:")
     input_prompt = "Hi, how are you?"
     system_message = "You are nice."
@@ -124,12 +125,22 @@ def main():
             soup = BeautifulSoup(response.text, "html.parser")
 
             # Find the label with class 'of-total-pages' and extract its text
-            label = soup.find("label", class_="of-total-pages")
-            if label:
+            pages = soup.find("label", class_="of-total-pages")
+            if pages:
                 # Extract the text and split it to get the number of pages
-                total_pages_text = label.get_text()
+                total_pages_text = pages.get_text()
                 total_pages = total_pages_text.split()[-1].replace(",", "")  # Extracting the number and removing comma
+                total_pages = 2
                 st.write("Total number of pages:", total_pages)
+                for i in stqdm(range(1, total_pages)):
+                    page_url = url + f"&page={i}"
+                    response = requests.get(page_url, headers=HEADERS)
+                    # html_document = response.text
+                    soup_page = BeautifulSoup(response.text, "html.parser")
+                    links = soup_page.find_all("a", class_="docsum-title")
+                    link_urls = [link['href'] for link in links]
+                    st.write("Links on this page:", link_urls)
+
             else:
                 st.write("Label not found. Check if the page structure has changed or your query didn't return results.")
 
