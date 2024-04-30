@@ -177,8 +177,9 @@ def main():
                     genes = json.loads(answers)
                     if 'genes' in genes:
                         if genes['genes'][0] != "None":
-                            jsons.append({'genes': genes['genes'],
-                                        'abstract': abstract[1]})
+                            # jsons.append({'genes': genes['genes'],
+                            #             'abstract': abstract[1]})
+                            jsons.extend(genes['genes'])
                 st.write(jsons)
                 
             else:
