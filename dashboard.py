@@ -14,7 +14,7 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
 }
 
-def query_openai(prompt, system_message, wait_time, prints_on):
+def query_openai(prompt, system_message, wait_time, prints_on, json_format_opt):
     """
     hits OPENAI API to generate sample, waits in case of error,
     calls sample_generator.generate to get one response
@@ -27,7 +27,7 @@ def query_openai(prompt, system_message, wait_time, prints_on):
     # generate chatgpt response, keep trying if error received
     while True:
         try:
-            return generate(prompt, system_message)
+            return generate(prompt, system_message, json_format_opt)
         except Exception as e:
             if prints_on:
                 st.write(f'Received error from OpenAI: {e}. Pausing for {wait_time}s.')
@@ -37,14 +37,14 @@ def query_openai(prompt, system_message, wait_time, prints_on):
             st.write(f"Pausing for {wait_time}")
             time.sleep(wait_time)
 
-def generate(prompt, system_message):
+def generate(prompt, system_message, json_format_opt):
         """
         Generates sample based on set of GPT related parameters
         @param prompt: input prompt used
         @param system_message: chatgpt system message
         @returns: GPT output
         """
-        json_format_opt = True
+        # json_format_opt = True
         model_str = 'gpt-4-0125-preview'
         temperature = 1.0
         max_tokens = 1500
@@ -176,14 +176,27 @@ def main():
                 jsons = []
                 for abstract in link_abstracts:
                     final_prompt = abstract[1] + '\n\n' + input_prompt
-                    answers = query_openai(final_prompt, system_message, 10, True)
+                    answers = query_openai(final_prompt, system_message, 10, True, True)
                     genes = json.loads(answers)
                     if 'genes' in genes:
                         if genes['genes'][0] != "None":
                             jsons.extend(genes['genes'])
+                    # second_prompt = f"Discuss the implications of the genes mentioned in this abstract for the pathogenesis of {topic}. Highlight any new findings."
+                    # second_query = abstract[1] + '\n\n' + second_prompt
+                    # answers_2 = query_openai(second_query, system_message, 10, True, False)
+                    # st.write(f"Let's discuss the implications of the genes mentioned in the abstracts for the pathogenesis of {topic}. Highlight any new findings.")
+                    # st.write(answers_2)
+                second_prompt = f"Discuss the implications of the genes mentioned in this list for the pathogenesis of {topic}. Highlight any new findings."
+                second_query = "genes:" + str(jsons) + '\n\n' + second_prompt
+                answers_2 = query_openai(second_query, system_message, 10, True, False)
+                
                 st.markdown("---")
                 st.subheader(f"Genes found in the most recent research on {topic}")
                 st.write(jsons)
+                st.markdown("---")
+                st.write(f"Let's discuss the implications of the genes mentioned in the abstracts for the pathogenesis of {topic}. Highlight any new findings.")
+                st.write(answers_2)
+                st.markdown("---")
                 
             else:
                 st.write("Page cannot be found.")
