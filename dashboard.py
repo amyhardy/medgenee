@@ -143,8 +143,6 @@ def main():
                     st.write(7)
                     num_pages = min(max_pages, total_pages)
                     for i in range(1, num_pages):
-                        # Update the progress bar
-                        progress_bar.progress(i / total_pages, "Gathering abstracts...")
                         page_url = url + f"&page={i}"
                         response = requests.get(page_url, headers=HEADERS)
                         if response.status_code == 200:
@@ -166,7 +164,9 @@ def main():
                                 else:
                                     continue
                         else:
-                            continue                   
+                            continue  
+                        # Update the progress bar
+                        progress_bar.progress(i / total_pages, "Gathering abstracts...")                 
                     st.write(f"Found {len(link_abstracts)} abstracts about {topic}.")
                     jsons = []
                     for abstract in link_abstracts:
