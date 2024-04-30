@@ -100,12 +100,14 @@ def main():
     st.sidebar.write("MedGenee allows users to jumpstart their gene analysis exploration journey by \
             pulling relevant abstracts from scientific research articles and using LLMs to \
             extract important gene information from them.")
-    st.sidebar.write("Please enter a topic of interest. Examples include 'alzheimer's disease', \
-            'sickle cell disease', 'cystic fibrosis', etc.")
+    st.sidebar.write("Please enter a topic of interest.")
+    st.sidebar.write("Examples include 'alzheimer's disease', \
+                     'sickle cell disease', 'cystic fibrosis', etc.")
     
     st.title('MedGenee')
 
     st.markdown("---")
+    
     topic = st.text_input("Disease, disorder, or topic here:")
     input_prompt = "Hi, how are you?"
     system_message = "You are nice."
