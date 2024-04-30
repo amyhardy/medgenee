@@ -198,10 +198,10 @@ def main():
 
     st.sidebar.subheader("MedGenee: A GPT-4 Powered Gene Analysis App")
     st.sidebar.markdown('---')
-    st.sidebar.text("MedGenee allows users to jumpstart their gene analysis exploration journey by \
+    st.sidebar.write("MedGenee allows users to jumpstart their gene analysis exploration journey by \
             pulling relevant abstracts from scientific research articles and using LLMs to \
             extract important gene information from them.")
-    st.sidebar.text("Please enter a topic of interest. Examples include 'alzheimer's disease', \
+    st.sidebar.write("Please enter a topic of interest. Examples include 'alzheimer's disease', \
             'sickle cell disease', 'cystic fibrosis', etc.")
     
     st.title('MedGenee')
