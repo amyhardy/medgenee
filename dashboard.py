@@ -6,7 +6,6 @@ import requests
 from bs4 import BeautifulSoup
 import yaml  # type: ignore
 import json
-import pdfkit
 
 openai.api_key = os.environ.get('OPENAI_API_KEY')
 
@@ -15,13 +14,7 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
 }
 
-def generate_pdf(html):
-    # Configure pdfkit path if necessary
-    path_wkhtmltopdf = '/usr/local/bin/wkhtmltopdf'  # Update this path based on your installation
-    config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
 
-    # Generate PDF
-    pdfkit.from_string(html, 'output.pdf', configuration=config)
 
 def query_openai(prompt, system_message, wait_time, prints_on, json_format_opt):
     """
@@ -214,15 +207,7 @@ def main():
                 st.write(f"Let's compare the genes listed with those known to be associated with {topic} and see if any of the genes found are new discoveries.")
                 st.write(answers_3)
                 st.markdown("---")
-                if st.button('Download PDF'):
-                    html = """
-                    <h1>My Streamlit App</h1>
-                    <p>Here's an example of a simple Streamlit app that will be converted to a PDF.</p>
-                    """
-                    generate_pdf(html)
-                    with open('output.pdf', 'rb') as f:
-                        st.download_button('Download PDF', f, file_name='my_streamlit_app.pdf')
-                            
+                
             else:
                 st.write("Page cannot be found.")
 if __name__ == "__main__":
