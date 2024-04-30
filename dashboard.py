@@ -128,7 +128,6 @@ def main():
             response = requests.get(url, headers=HEADERS)
             if response.status_code == 200:
                 soup = BeautifulSoup(response.text, "html.parser")
-
                 # Find the label with class 'of-total-pages' and extract its text
                 pages = soup.find("label", class_="of-total-pages")
                 if pages:
@@ -172,8 +171,9 @@ def main():
                         jsons.append(answers)
                     st.write(jsons)
 
+                else:
+                    st.write("Num pages not found. Check if the page structure has changed or your query didn't return results.")
             else:
-                st.write("Num pages not found. Check if the page structure has changed or your query didn't return results.")
-
+                st.write("Page cannot be found.")
 if __name__ == "__main__":
     main()
