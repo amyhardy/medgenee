@@ -143,7 +143,9 @@ def main():
                     link_urls = [link['href'] for link in links]
                     link_abstracts = []
                     for link in link_urls:
-                        res = requests.get(link, headers=HEADERS)
+                        url = f'https://pubmed.ncbi.nlm.nih.gov/37729908/{link}'
+                        st.write(url)
+                        res = requests.get(url, headers=HEADERS)
                         html_text = res.text
                         link_soup = BeautifulSoup(html_text, 'html.parser')
                         abstract = link_soup.find("div", class_="abstract-content selected")
