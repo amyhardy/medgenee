@@ -176,7 +176,6 @@ def generate(prompt, system_message):
                     {'role': "user", 'content': prompt}
                 ],
                 temperature=temperature,
-                # max_tokens=max_tokens,
                 top_p=top_p,
                 frequency_penalty=frequency_penalty,
                 presence_penalty=presence_penalty
@@ -196,9 +195,19 @@ def generate(prompt, system_message):
             return sample.choices[0].text
 
 def main():
+    st.sidebar(
+        st.subheader("MedGenee: A GPT-4 Powered Gene Analysis App")
+        st.markdown('---')
+        st.text("MedGenee allows users to jumpstart their gene analysis exploration journey by \
+                pulling relevant abstracts from scientific research articles and using LLMs to \
+                extract important gene information from them.")
+        st.text("Please enter a topic of interest. Examples include 'alzheimer's disease', \
+                'sickle cell disease', 'cystic fibrosis', etc.")
+    )
     st.title('MedGenee')
 
     # User input
+    st.markdown("---")
     topic = st.text_input("Disease, disorder, or topic here:")
 
     # Button to show greeting
