@@ -198,6 +198,13 @@ def main():
                 st.write(f"Let's discuss the implications of the genes mentioned in the abstracts for the pathogenesis of {topic}. Highlight any new findings.")
                 st.write(answers_2)
                 st.markdown("---")
+                third_prompt = f"Compare the genes listed with those known to be associated with {topic} and note any novel genes. Are any listed new findings?"
+                third_prompt += "genes:" + str(set_geres)
+                answers_3 = query_openai(third_prompt, system_message, 10, True, False)
+                st.markdown("---")
+                st.write(f"Let's compare the genes listed with those known to be associated with {topic} and see if any of the genes found are new discoveries.")
+                st.write(answers_3)
+                st.markdown("---")
                 
             else:
                 st.write("Page cannot be found.")
