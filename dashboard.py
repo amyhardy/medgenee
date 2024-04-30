@@ -114,9 +114,11 @@ def main():
         cfg = yaml.safe_load(f)
     json_format = cfg['json_format']
     none_return = cfg['none_return']
+    example_genes = cfg['example_genes']
     topic = st.text_input("Disease, disorder, or topic here:")
     input_prompt = f"Analyze the above scientific research paper abstract. Please return the output in the following JSON format: {json_format}"
     input_prompt += f"If no genes are found in the abstracts, return {none_return}"
+    input_prompt += f"Here are some examples of gene names: {example_genes}"
     system_message = "You are a bioinformatics expert."
 
     if st.button("Start Gene Analysis"):
@@ -172,9 +174,8 @@ def main():
                     answers = query_openai(input_prompt, system_message, 10, True)
                     genes = json.loads(answers)
                     if 'genes' in genes:
-                        jsons.append({'genes': genes,
-                                        'abstract': abstract[1]})
-                    # jsons.append(answers)
+                        jsons.append({'genes': genes['genes'],
+                                      'abstract': abstract[1]})
                 st.write(jsons)
                 
             else:
