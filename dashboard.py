@@ -114,7 +114,7 @@ def main():
     if st.button("Start Gene Analysis"):
         with st.spinner(f"Generating Gene Analysis on {topic}..."):
             format_topic = topic.lower().replace("'", '%27').replace(' ', '+')
-            url = "https://pubmed.ncbi.nlm.nih.gov/?term={format_topic}%5BTitle%2FAbstract%5D&filter=dates.2023%2F1%2F1-3000%2F12%2F12"
+            url = f"https://pubmed.ncbi.nlm.nih.gov/?term={format_topic}%5BTitle%2FAbstract%5D&filter=dates.2023%2F1%2F1-3000%2F12%2F12"
             st.write(url)
             response = requests.get(url, headers=HEADERS)
             # plain_text = extract_text(response.text)
