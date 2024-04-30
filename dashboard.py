@@ -163,19 +163,20 @@ def main():
                             continue  
                         # Update the progress bar
                         progress_bar.progress(i / total_pages, "Gathering abstracts...")                 
-                    st.write(f"Found {len(link_abstracts)} abstracts about {topic}.")
-                    jsons = []
-                    for abstract in link_abstracts:
-                        answers = query_openai(input_prompt, system_message, 10, True)
-                        genes = json.loads(answers)
-                        if 'genes' in genes:
-                            jsons.append({'genes': genes,
-                                          'abstract': abstract[1]})
-                        # jsons.append(answers)
-                    st.write(jsons)
 
                 else:
                     st.write("Num pages not found. Check if the page structure has changed or your query didn't return results.")
+                st.write(f"Found {len(link_abstracts)} abstracts about {topic}.")
+                jsons = []
+                for abstract in link_abstracts:
+                    answers = query_openai(input_prompt, system_message, 10, True)
+                    genes = json.loads(answers)
+                    if 'genes' in genes:
+                        jsons.append({'genes': genes,
+                                        'abstract': abstract[1]})
+                    # jsons.append(answers)
+                st.write(jsons)
+                
             else:
                 st.write("Page cannot be found.")
 if __name__ == "__main__":
