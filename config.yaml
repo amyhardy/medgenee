@@ -1,0 +1,8 @@
+json_format : |
+  {
+    "genes": [
+         "<name of gene>",
+         "<name of gene>",
+         ...
+    ]
+  }

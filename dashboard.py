@@ -4,7 +4,7 @@ import os
 import time
 import requests
 from bs4 import BeautifulSoup
-from stqdm import stqdm
+import yaml  # type: ignore
 
 openai.api_key = os.environ.get('OPENAI_API_KEY')
 
@@ -44,7 +44,7 @@ def generate(prompt, system_message):
         @param system_message: chatgpt system message
         @returns: GPT output
         """
-        json_format_opt = False
+        json_format_opt = True
         model_str = 'gpt-4-0125-preview'
         temperature = 1.0
         max_tokens = 1500
@@ -110,9 +110,13 @@ def main():
 
     st.markdown("---")
 
+    with open('config.yaml') as f:
+        cfg = yaml.safe_load(f)
+    json_format = cfg['json_format']
     topic = st.text_input("Disease, disorder, or topic here:")
-    input_prompt = "Hi, how are you?"
-    system_message = "You are nice."
+    input_prompt = f"Analyze the above scientific research paper abstract. Please return the output in the following JSON format: {json_format}"
+    input_prompt += "If no genes are found in the abstracts, return '{'genes': []}'"
+    system_message = "You are a bioinformatics expert."
 
     
     if st.button("Start Gene Analysis"):
@@ -133,7 +137,7 @@ def main():
                 total_pages = total_pages_text.split()[-1].replace(",", "")  # Extracting the number and removing comma
                 total_pages = 2
                 st.write("Total number of pages:", total_pages)
-                progress_bar = st.progress(0)
+                progress_bar = st.progress(0, text="Gathering abstracts...")
                 for i in range(1, total_pages):
                     page_url = url + f"&page={i}"
                     response = requests.get(page_url, headers=HEADERS)
@@ -144,7 +148,7 @@ def main():
                     link_abstracts = []
                     for link in link_urls:
                         url = f'https://pubmed.ncbi.nlm.nih.gov/{link}'
-                        st.write(url)
+                        # st.write(url)
                         res = requests.get(url, headers=HEADERS)
                         html_text = res.text
                         link_soup = BeautifulSoup(html_text, 'html.parser')
@@ -156,7 +160,13 @@ def main():
                         # Update the progress bar
                         progress_bar.progress(i / total_pages)
                     
-                    st.write("Abstracts from all pages:", link_abstracts)
+                    # st.write("Abstracts from all pages:", link_abstracts)
+                    st.write(f"Found {len(link_abstracts)} abstracts about {topic}.")
+                    jsons = []
+                    for abstract in link_abstracts:
+                        answers = query_openai(input_prompt, system_message, 10, True)
+                        jsons.append(answers)
+                    st.write(jsons)
 
 
             else:
