@@ -9,22 +9,9 @@ import json
 
 openai.api_key = os.environ.get('OPENAI_API_KEY')
 
-
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
 }
-
-# def load_css():
-#     st.markdown("""
-#         <style>
-#         .stApp {
-#             background-image: url('https://raw.githubusercontent.com/amyhardy/medgenee/main/dalle.jpg');
-#             background-size: cover;
-#             background-repeat: no-repeat;
-#             background-position: center;
-#         }
-#         </style>
-#         """, unsafe_allow_html=True)
 
 def query_openai(prompt, system_message, wait_time, prints_on, json_format_opt):
     """
@@ -56,7 +43,6 @@ def generate(prompt, system_message, json_format_opt):
         @param system_message: chatgpt system message
         @returns: GPT output
         """
-        # json_format_opt = True
         model_str = 'gpt-4-0125-preview'
         temperature = 1.0
         max_tokens = 1500
@@ -120,6 +106,13 @@ def main():
     st.sidebar.write("Please enter a topic of interest.")
     st.sidebar.write("Examples include 'alzheimer's disease', \
                      'sickle cell disease', 'cystic fibrosis', etc.")
+    pdf_url = "https://raw.githubusercontent.com/amyhardy/medgenee/main/MedGenee.pdf"
+    st.sidebar.download_button(
+        label="Download MedGenee Paper",
+        data=requests.get(pdf_url).content,
+        file_name="MedGenee.pdf",
+        mime="application/pdf"
+    )
     
     st.title('MedGenee')
     st.image('https://raw.githubusercontent.com/amyhardy/medgenee/main/dalle.jpg')
@@ -151,7 +144,7 @@ def main():
                     total_pages_text = pages.get_text()
                     total_pages = total_pages_text.split()[-1].replace(",", "")
                     total_pages = 2
-                    st.write("Total number of pages found on PubMed for Academic articles:", total_pages)
+                    # st.write("Total number of pages found on PubMed for Academic articles:", total_pages)
                     progress_bar = st.progress(0, "Gathering abstracts...")
                     max_pages = 10
                     num_pages = min(max_pages, total_pages)
